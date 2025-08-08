@@ -5,96 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Suivi des candidatures</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 </head>
-<body class="bg-gray-50 p-6 min-h-screen flex flex-col items-center">
+<body class="bg-gray-50 p-4 sm:p-6 min-h-screen flex flex-col items-center">
 
-  <h1 class="text-3xl font-bold mb-6">Suivi des candidatures</h1>
+  <h1 class="text-3xl font-bold text-center mb-6">Suivi des candidatures</h1>
 
-  <!-- Conteneur message -->
-  <div id="messageBox" class="hidden max-w-xl mb-4 p-3 rounded"></div>
+  <!-- Message -->
+  <div id="messageBox" class="hidden max-w-xl w-full mb-4 p-3 rounded border text-sm font-medium"></div>
 
   <!-- Formulaire -->
-  <form id="candidatureForm" class="bg-white p-6 rounded shadow mb-6 space-y-4 max-w-xl w-full" enctype="multipart/form-data" autocomplete="off">
+  <form id="candidatureForm" class="bg-white p-6 rounded-lg shadow mb-6 space-y-4 w-full max-w-xl" enctype="multipart/form-data" autocomplete="off">
     <div>
       <label for="email" class="block font-semibold mb-1">Adresse e-mail</label>
-      <input type="email" id="email" name="email" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input type="email" id="email" name="email" required class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
     <div>
       <label for="password" class="block font-semibold mb-1">Mot de passe</label>
-      <input type="password" id="password" name="password" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input type="password" id="password" name="password" required class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
     <div>
-  <label for="email_entreprise" class="block font-semibold mb-1">Email de l'entreprise</label>
-  <input type="email" id="email_entreprise" name="email_entreprise" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
-</div>
-
+      <label for="email_entreprise" class="block font-semibold mb-1">Email de l'entreprise</label>
+      <input type="email" id="email_entreprise" name="email_entreprise" required class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
     <div>
       <label for="site_url" class="block font-semibold mb-1">URL du site</label>
-      <input type="url" id="site_url" name="site_url" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input type="url" id="site_url" name="site_url" required class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
     <div>
       <label for="entreprise" class="block font-semibold mb-1">Nom de l'entreprise</label>
-      <input type="text" id="entreprise" name="entreprise" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input type="text" id="entreprise" name="entreprise" required class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
     <div>
       <label for="cv" class="block font-semibold mb-1">CV (fichier PDF, DOC...)</label>
-      <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" class="w-full border border-gray-300 px-3 py-2 rounded" />
+      <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" class="w-full border border-gray-300 px-3 py-2 rounded-md" />
     </div>
     <div>
       <label for="infos_entreprise" class="block font-semibold mb-1">Infos sur l'entreprise (pour générer lettre)</label>
-      <textarea id="infos_entreprise" name="infos_entreprise" rows="3" class="w-full border border-gray-300 px-3 py-2 rounded resize-y focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      <textarea id="infos_entreprise" name="infos_entreprise" rows="3" class="w-full border border-gray-300 px-3 py-2 rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
     </div>
-
-    <!-- Textarea lettre générée, modifiable -->
     <div>
       <label for="lettre_generee" class="block font-semibold mb-1">Lettre générée</label>
-      <textarea id="lettre_generee" name="lettre_generee" rows="8" class="w-full border border-gray-300 px-3 py-2 rounded resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+      <textarea id="lettre_generee" name="lettre_generee" rows="8" class="w-full border border-gray-300 px-3 py-2 rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
     </div>
 
-    <div class="flex space-x-4">
-      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition w-48">Ajouter candidature</button>
-      <button type="button" id="generateLetterBtn" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition w-48">Générer lettre</button>
-    </div>
+    <!-- Boutons -->
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+  <button type="submit" class="w-full sm:w-1/2 flex items-center justify-center px-4 py-2 rounded-lg font-semibold text-blue-700 hover:text-blue-900 transition-colors">
+    <i class="fa-solid fa-plus mr-2"></i>
+    Ajouter candidature
+  </button>
+  <button type="button" id="generateLetterBtn" class="w-full sm:w-1/2 flex items-center justify-center px-4 py-2 rounded-lg font-semibold text-emerald-700 hover:text-emerald-900 transition-colors">
+    <i class="fa-solid fa-file-lines mr-2"></i>
+    Générer lettre
+  </button>
+</div>
+
   </form>
 
-  <!-- Filtre -->
+  <!-- Filtrage -->
   <div class="mb-4 flex items-center space-x-2 max-w-xl w-full">
     <input type="checkbox" id="filterNoResponse" class="h-4 w-4 text-blue-600 border-gray-300 rounded" />
     <label for="filterNoResponse" class="text-sm text-gray-700 select-none">Afficher uniquement les candidatures sans réponse</label>
   </div>
 
   <!-- Tableau -->
-  <div class="overflow-x-auto max-w-6xl w-full">
-    <table class="min-w-full bg-white rounded shadow">
+  <div class="overflow-x-auto w-full max-w-6xl rounded border border-gray-200">
+    <table class="min-w-full bg-white text-sm text-left">
       <thead>
-        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-          <th class="py-3 px-6 text-left">Email</th>
-          <th class="py-3 px-6 text-left">Site</th>
-          <th class="py-3 px-6 text-left">Entreprise</th>
-          <th class="py-3 px-6 text-left">CV</th>
-          <th class="py-3 px-6 text-left">Infos entreprise</th>
-              <th class="py-3 px-6 text-left">Email entreprise</th> 
-          <th class="py-3 px-6 text-left">Réponse</th>
-          <th class="py-3 px-6 text-left">Actions</th>
+        <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
+          <th class="py-3 px-6">Email</th>
+          <th class="py-3 px-6">Site</th>
+          <th class="py-3 px-6">Entreprise</th>
+          <th class="py-3 px-6">CV</th>
+          <th class="py-3 px-6">Infos entreprise</th>
+          <th class="py-3 px-6">Email entreprise</th>
+          <th class="py-3 px-6">Réponse</th>
+          <th class="py-3 px-6">Actions</th>
         </tr>
       </thead>
-      <tbody id="candidaturesTableBody" class="text-gray-600 text-sm">
-        <!-- lignes JS insérées ici -->
+      <tbody id="candidaturesTableBody" class="text-gray-700">
+        <!-- lignes JS -->
       </tbody>
     </table>
   </div>
 
   <!-- Pagination -->
-  <div id="paginationControls" class="flex justify-center items-center space-x-4 mt-4 max-w-6xl w-full"></div>
+  <div id="paginationControls" class="flex justify-center items-center gap-4 mt-4 max-w-6xl w-full text-sm font-medium"></div>
 
-  <!-- Modal lettre générée -->
-  <div id="letterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded p-6 max-w-lg w-full shadow-lg relative">
+  <!-- Modale -->
+  <div id="letterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-white rounded-lg p-6 max-w-lg w-full shadow-lg relative">
       <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold text-xl">&times;</button>
       <h2 class="text-xl font-semibold mb-4">Lettre générée</h2>
-      <pre id="modalLetterContent" class="whitespace-pre-wrap bg-gray-100 p-4 rounded max-h-96 overflow-auto min-h-[150px]">
-        <!-- lettre chargée ici -->
-      </pre>
+      <pre id="modalLetterContent" class="whitespace-pre-wrap bg-gray-100 p-4 rounded max-h-96 overflow-auto min-h-[150px] text-sm"></pre>
       <div id="modalLoading" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center text-gray-700 text-lg font-semibold hidden">
         Chargement...
       </div>
@@ -164,48 +169,130 @@
   });
 
   // Générer lettre basée sur infos_entreprise + entreprise
-  generateBtn.addEventListener("click", () => {
-    const entreprise = form.entreprise.value.trim();
-    const infos = form.infos_entreprise.value.trim();
+//  generateBtn.addEventListener("click", async () => {
+//   const entreprise = form.entreprise.value.trim();
+//   const infos = form.infos_entreprise.value.trim();
+//   const cv = form.cv ? form.cv.value.trim() : ""; // s'il y a un champ CV
 
-    if (!entreprise || !infos) {
-      showMessage("Merci de remplir le nom de l'entreprise et les infos sur l'entreprise.", "error");
-      return;
+//   if (!entreprise || !infos) {
+//     showMessage("Merci de remplir le nom de l'entreprise et les infos sur l'entreprise.", "error");
+//     return;
+//   }
+
+//   try {
+//     const response = await fetch("api/candidatures/generate-letter", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify({ entreprise, infos_entreprise: infos, cv })
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Erreur lors de la génération de la lettre");
+//     }
+
+//     const data = await response.json();
+//     lettreTextarea.value = data.lettre_generee || "";
+//     showMessage("Lettre générée automatiquement depuis le serveur.", "success");
+//   } catch (err) {
+//     showMessage("Erreur lors de la génération de la lettre.", "error");
+//     console.error(err);
+//   }
+// });
+
+generateBtn.addEventListener("click", async () => {
+  const entreprise = form.entreprise.value.trim();
+  const infos = form.infos_entreprise.value.trim();
+  const cvFile = form.cv.files[0];
+
+  if (!entreprise || !infos || !cvFile) {
+    showMessage("Merci de remplir le nom de l'entreprise, les infos, et de sélectionner un CV.", "error");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("entreprise", entreprise);
+  formData.append("infos_entreprise", infos);
+  formData.append("cv", cvFile); // envoie le fichier sélectionné
+
+  try {
+    const response = await fetch("api/candidatures/generate-letter", {
+      method: "POST",
+      body: formData // ne pas mettre Content-Type, c’est FormData qui le gère
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de la génération de la lettre");
     }
 
-    // Exemple simple de génération de lettre (à adapter)
-    const lettre = `Objet : Candidature pour un poste chez ${entreprise}\n\nMadame, Monsieur,\n\n${infos}\n\nJe vous remercie pour votre attention et espère pouvoir échanger avec vous prochainement.\n\nCordialement,\n[Votre Nom]`;
+    const data = await response.json();
+    lettreTextarea.value = data.lettre_generee || "";
+    showMessage("Lettre générée automatiquement depuis le serveur.", "success");
+  } catch (err) {
+    showMessage("Erreur lors de la génération de la lettre.", "error");
+    console.error(err);
+  }
+});
 
-    lettreTextarea.value = lettre;
-    showMessage("Lettre générée automatiquement.", "success");
-  });
 
-  // Gestion soumission formulaire pour ajouter candidature
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+ form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    // Préparation données à envoyer
-    const formData = new FormData(form);
+  const entreprise = form.entreprise.value.trim();
+  const infos = form.infos_entreprise.value.trim();
+  const cvFile = form.cv.files[0];
 
-    // Conversion lettre_generee en string dans formData
-    formData.set("lettre_generee", lettreTextarea.value.trim());
+  if (!entreprise || !infos || !cvFile) {
+    showMessage("Merci de remplir le nom de l'entreprise, les infos, et de sélectionner un CV.", "error");
+    return;
+  }
 
-    try {
-      const res = await fetch(apiBase, {
-        method: "POST",
-        body: formData
-      });
-      if (!res.ok) throw new Error("Erreur serveur");
+  try {
+    // Génération lettre avec FormData (car serveur attend fichier)
+    const genFormData = new FormData();
+    genFormData.append("entreprise", entreprise);
+    genFormData.append("infos_entreprise", infos);
+    genFormData.append("cv", cvFile);
+const generateLetterUrl = "/api/candidatures/generate-letter";
 
-      showMessage("Candidature ajoutée avec succès", "success");
-      form.reset();
-      lettreTextarea.value = "";
-      fetchCandidatures();
+    const genRes = await fetch(generateLetterUrl, {
+      method: "POST",
+      body: genFormData,
+    });
 
-    } catch (err) {
-      showMessage("Erreur lors de l'ajout de la candidature", "error");
+    if (!genRes.ok) throw new Error("Erreur lors de la génération de la lettre");
+
+    const { lettre_generee } = await genRes.json();
+    lettreTextarea.value = lettre_generee;
+
+    // Préparer et envoyer la candidature complète
+    const candidatureFormData = new FormData(form);
+    candidatureFormData.set("lettre_generee", lettre_generee);
+    // Assure-toi que le cv est bien dans candidatureFormData, sinon le remettre
+    if (!candidatureFormData.has("cv") && cvFile) {
+      candidatureFormData.append("cv", cvFile);
     }
-  });
+
+    const res = await fetch(apiBase, {
+      method: "POST",
+      body: candidatureFormData,
+    });
+
+    if (!res.ok) throw new Error("Erreur serveur lors de l'ajout de la candidature");
+
+    showMessage("Candidature ajoutée avec succès", "success");
+    form.reset();
+    lettreTextarea.value = "";
+    // Recharge la liste, fonction à définir
+    fetchCandidatures();
+
+  } catch (err) {
+    showMessage(err.message || "Erreur inconnue", "error");
+    console.error(err);
+  }
+});
+
 
   // Fonction fetch candidatures
   async function fetchCandidatures() {
@@ -256,14 +343,16 @@
         <td class="py-3 px-6 whitespace-pre-wrap max-w-xs">${c.infos_entreprise || ""}</td>
         <td class="py-3 px-6 break-words">${c.email_entreprise || "-"}</td>
 
-        <td class="py-3 px-6">${hasResponse ? "✅ Oui" : "❌ Non"}</td>
-        <td class="py-3 px-6 space-x-2">
-          ${!hasResponse ? `<button data-id="${c._id}" class="mark-response-btn bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition w-24 h-8">Marquer réponse</button>` : ""}
-          <button data-letter="${encodeURIComponent(c.lettre_generee || '')}" data-id="${c._id}" class="view-letter-btn bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition w-24 h-8">Consulter</button>
-          <button data-id="${c._id}" class="delete-cand-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition w-24 h-8">Supprimer</button>
-            <button data-id="${c._id}" class="relancer-btn bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition w-24 h-8">Relancer</button>
+        <td class="py-3 px-6">${hasResponse ? " Oui" : " Non"}</td>
+        <td class="py-3 px-6 space-y-1">
+  ${!hasResponse ? `
+    <span data-id="${c._id}" class="mark-response-btn cursor-pointer text-green-600 hover:text-green-800 underline block">Marquer réponse</span>
+  ` : ""}
+  <span data-letter="${encodeURIComponent(c.lettre_generee || '')}" data-id="${c._id}" class="view-letter-btn cursor-pointer text-blue-600 hover:text-blue-800 underline block">Consulter</span>
+  <span data-id="${c._id}" class="delete-cand-btn cursor-pointer text-red-600 hover:text-red-800 underline block">Supprimer</span>
+  <span data-id="${c._id}" class="relancer-btn cursor-pointer text-yellow-600 hover:text-yellow-800 underline block">Relancer</span>
+</td>
 
-        </td>
       `;
 
       tableBody.appendChild(tr);

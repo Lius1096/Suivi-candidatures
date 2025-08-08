@@ -15,3 +15,7 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+#folder
+uploads/
+create-structure.ps1

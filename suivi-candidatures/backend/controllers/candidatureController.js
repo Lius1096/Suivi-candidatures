@@ -1,7 +1,7 @@
 const Candidature = require('../models/Candidature');
 const path = require('path');
 const fs = require('fs');
-
+const pdfParse = require("pdf-parse");
 exports.create = async (req, res) => {
   try {
     const { email, password, site_url, entreprise, infos_entreprise, lettre_generee, email_entreprise } = req.body;
@@ -66,29 +66,96 @@ exports.list = async (req, res) => {
   }
 };
 
-exports.generateLetter = async (req, res) => {
-  try {
-    const { entreprise, infos_entreprise, cv } = req.body;
+// exports.generateLetter = async (req, res) => {
+//   try {
+//     const { entreprise, infos_entreprise, cv } = req.body;
 
-    const lettre = `
-Bonjour,
+//     const lettre = `
+// Madame, Monsieur,
 
-Je vous contacte au sujet de ma candidature pour **${entreprise}**.
-${infos_entreprise}
+// Je me permets de revenir vers vous concernant ma candidature au poste de ${infos_entreprise} au sein de  ${entreprise}.
 
-Mon parcours :
-${cv ? cv.slice(0, 300) : "[Pas de CV fourni]"}...
+// Je reste vivement intéressé(e) par cette opportunité et me tiens à votre disposition pour tout échange complémentaire.
 
-Je reste à votre disposition pour tout échange.
+// Pour rappel, voici un aperçu de mon parcours :
+// ${cv ? cv.slice(0, 300) : "[CV non fourni]"}...
+
+// Dans l’attente de votre retour, je vous prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées.
+
+// Cordialement,
+// `;
+
+//     res.json({ lettre_generee: lettre });
+//   } catch (err) {
+//     res.status(500).json({ error: "Erreur génération lettre" });
+//   }
+// };
+
+
+exports.generateLetter = [
+  async (req, res) => {
+    try {
+      const { entreprise, infos_entreprise } = req.body;
+      const cvFile = req.file;
+
+      if (!entreprise || !infos_entreprise || !cvFile) {
+        return res.status(400).json({ error: "Champs requis manquants ou fichier CV manquant." });
+      }
+
+      const dataBuffer = fs.readFileSync(cvFile.path);
+      const pdfData = await pdfParse(dataBuffer);
+
+      // Supprimer le fichier temporaire après lecture
+      fs.unlinkSync(cvFile.path);
+
+      const lignes = pdfData.text.split("\n").map(line => line.trim()).filter(line => line !== "");
+
+      const motsClesFormation = [
+        "formation", "formations", "certification", "certifications", "diplôme", "diplome",
+        "bts", "licence", "master", "bac", "education", "études", "etudes"
+      ];
+
+      const startIndex = lignes.findIndex(line =>
+        motsClesFormation.some(motCle => line.toLowerCase().includes(motCle))
+      );
+
+      let formationTexte = "[CV non fourni ou informations non détectées]";
+
+      if (startIndex !== -1) {
+        const sectionLines = [];
+        for (let i = startIndex + 1; i < lignes.length; i++) {
+          const line = lignes[i];
+          if (/^(exp[ée]rience|comp[ée]tence|skills?|profil|projets|contact)/i.test(line)) break;
+          sectionLines.push(line);
+        }
+
+        formationTexte = sectionLines.length > 0
+          ? sectionLines.join("\n")
+          : lignes[startIndex];
+      }
+
+      const lettre = `
+Madame, Monsieur,
+
+Je me permets de revenir vers vous concernant ma candidature au poste de **${infos_entreprise}** au sein de votre entreprise **${entreprise}**.
+
+Je reste vivement intéressé(e) par cette opportunité et me tiens à votre disposition pour tout échange complémentaire.
+
+Pour rappel, voici un aperçu de mon parcours :
+${formationTexte}
+
+Dans l’attente de votre retour, je vous prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées.
 
 Cordialement,
 `;
 
-    res.json({ lettre_generee: lettre });
-  } catch (err) {
-    res.status(500).json({ error: "Erreur génération lettre" });
+      res.json({ lettre_generee: lettre });
+    } catch (err) {
+      console.error("Erreur génération lettre :", err);
+      res.status(500).json({ error: "Erreur lors de la génération de la lettre." });
+    }
   }
-};
+];
 
 exports.downloadCV = async (req, res) => {
   try {

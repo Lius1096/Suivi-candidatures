@@ -38,7 +38,7 @@ router.post(
 // Autres routes
 router.get('/', list);
 router.post('/:id/mark-response', markResponse);
-router.post('/generate-letter', generateLetter);
+router.post('/generate-letter', upload.single("cv"), generateLetter);
 router.delete('/:id', deleteCandidature);
 
 
